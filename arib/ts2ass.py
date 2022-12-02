@@ -28,6 +28,39 @@ from mpeg.ts import ES
 from arib.ass import ASSFormatter
 from arib.ass import ASSFile
 
+import sys
+
+def win32_unicode_argv():
+    """Uses shell32.GetCommandLineArgvW to get sys.argv as a list of Unicode
+    strings.
+
+    Versions 2.x of Python don't support Unicode in sys.argv on
+    Windows, with the underlying Windows API instead replacing multi-byte
+    characters with '?'.
+    """
+
+    from ctypes import POINTER, byref, cdll, c_int, windll
+    from ctypes.wintypes import LPCWSTR, LPWSTR
+
+    GetCommandLineW = cdll.kernel32.GetCommandLineW
+    GetCommandLineW.argtypes = []
+    GetCommandLineW.restype = LPCWSTR
+
+    CommandLineToArgvW = windll.shell32.CommandLineToArgvW
+    CommandLineToArgvW.argtypes = [LPCWSTR, POINTER(c_int)]
+    CommandLineToArgvW.restype = POINTER(LPWSTR)
+
+    cmd = GetCommandLineW()
+    argc = c_int(0)
+    argv = CommandLineToArgvW(cmd, byref(argc))
+    if argc.value > 0:
+        # Remove Python executable and commands if present
+        start = argc.value - len(sys.argv)
+        return [argv[i] for i in
+                xrange(start, argc.value)]
+
+sys.argv = win32_unicode_argv()
+
 # GLOBALS TO KEEP TRACK OF STATE
 initial_timestamp = None
 elapsed_time_s = 0
@@ -163,8 +196,8 @@ def main():
 
   parser = argparse.ArgumentParser(
     description='Remove ARIB formatted Closed Caption information from an MPEG TS file and format the results as a standard .ass subtitle file.')
-  parser.add_argument('infile', help='Input filename (MPEG2 Transport Stream File)', type=str)
-  parser.add_argument('-o', '--outfile', help='Output filename (.ass subtitle file)', type=str, default=None)
+  parser.add_argument('infile', help='Input filename (MPEG2 Transport Stream File)', type=unicode)
+  parser.add_argument('-o', '--outfile', help='Output filename (.ass subtitle file)', type=unicode, default=None)
   parser.add_argument('-p', '--pid',
                       help='Specify a PID of a PES known to contain closed caption info (tool will attempt to find the proper PID if not specified.).',
                       type=int, default=-1)

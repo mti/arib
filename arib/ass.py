@@ -116,6 +116,7 @@ class ASSFile(object):
       self._f = codecs.open(filepath,'w',encoding='utf8')
       self.write_header(width,height, filepath)
       self.write_styles()
+      self.write_event_header()
     except:
         raise FileOpenError("Could not open file " + filepath +" for writing.")
 
@@ -150,7 +151,7 @@ Last Style Storage: Default
 Video File: {title}
 
 
-'''.format(width=width, height=height, title=unicode(title, 'utf-8'))
+'''.format(width=width, height=height, title=title)
     self._f.write(header)
 
   def write_styles(self):
@@ -163,6 +164,12 @@ Style: small,MS UI Gothic,18,&H00FFFFFF,&H000000FF,&H00000000,&H88000000,0,0,0,0
 
 '''
     self._f.write(styles)
+
+  def write_event_header(self):
+    event_header = u'''[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+'''
+    self._f.write(event_header)
 
 def asstime(seconds):
   '''format floating point seconds elapsed time to 0:02:14.53

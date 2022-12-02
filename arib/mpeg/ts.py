@@ -131,7 +131,7 @@ class TS(object):
       #memory map the file if necessary (prob requires 64 bit systems)
       _file = f
       if memorymap:
-        _file = mmap.mmap(f.fileno(), 0, prot=mmap.PROT_READ)
+        _file = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ)
       
       while True:
         packet = _file.read(TS.PACKET_SIZE)
