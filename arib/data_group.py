@@ -1,5 +1,5 @@
 # vim: set ts=2 expandtab:
-'''
+"""
 Module: data_group.py
 Desc: ARIB data group container
 Author: John O'Neil
@@ -9,7 +9,7 @@ DATE: Thursday, March 6th 2014
 Data group container is the primary container in an ARIB closed
 caption and teletext elementary stream.
   
-'''
+"""
 import sys
 import read
 from read import EOFError
@@ -24,15 +24,16 @@ DEBUG = False
 
 
 class DataGroupParseError(Exception):
-    """ Custom Exception generated when parsing a DataGroup from a binary stream
-    """
+    """Custom Exception generated when parsing a DataGroup from a binary stream"""
+
     pass
 
 
 class DataGroup(object):
-    '''Represents an arib Data Group packet structure as
+    """Represents an arib Data Group packet structure as
     described in ARIB b-24 Table 9-1 on pg 172
-    '''
+    """
+
     GroupA_Caption_Management = 0x0
     GroupB_Caption_Management = 0x20
     GroupA_Caption_Statement_lang1 = 0x1
@@ -51,24 +52,31 @@ class DataGroup(object):
         self._stuffing_byte = read.ucb(f)
         if DEBUG:
             print(hex(self._stuffing_byte))
-        if (self._stuffing_byte != 0x80):
-            raise DataGroupParseError("Initial stuffing byte not equal to 0x80: " + hex(self._stuffing_byte))
+        if self._stuffing_byte != 0x80:
+            raise DataGroupParseError(
+                "Initial stuffing byte not equal to 0x80: " + hex(self._stuffing_byte)
+            )
 
         self._data_identifier = read.ucb(f)
         if DEBUG:
             print(hex(self._data_identifier))
-        if self._data_identifier != 0xff:
-            raise DataGroupParseError("Initial data identifier is not equal to 0xff" + hex(self._data_identifier))
+        if self._data_identifier != 0xFF:
+            raise DataGroupParseError(
+                "Initial data identifier is not equal to 0xff"
+                + hex(self._data_identifier)
+            )
 
         self._private_stream_id = read.ucb(f)
         if DEBUG:
             print(hex(self._private_stream_id))
-        if self._private_stream_id != 0xf0:
-            raise DataGroupParseError("Private stream id not equal to 0xf0: " + hex(self._private_stream_id))
+        if self._private_stream_id != 0xF0:
+            raise DataGroupParseError(
+                "Private stream id not equal to 0xf0: " + hex(self._private_stream_id)
+            )
 
         self._group_id = read.ucb(f)
         if DEBUG:
-            print('group id ' + str((self._group_id >> 2) & (~0x20)))
+            print("group id " + str((self._group_id >> 2) & (~0x20)))
         self._group_link_number = read.ucb(f)
         if DEBUG:
             print(str(self._group_link_number))
@@ -76,11 +84,17 @@ class DataGroup(object):
         if DEBUG:
             print(str(self._last_group_link_number))
         if self._group_link_number != self._last_group_link_number:
-            print(("This is data group packet " + str(self._group_link_number) + " of " + str(
-                self._last_group_link_number)))
+            print(
+                (
+                    "This is data group packet "
+                    + str(self._group_link_number)
+                    + " of "
+                    + str(self._last_group_link_number)
+                )
+            )
         self._data_group_size = read.usb(f)
         if DEBUG:
-            print('data group size found is ' + str(self._data_group_size))
+            print("data group size found is " + str(self._data_group_size))
 
         if not self.is_management_data():
             self._payload = CaptionStatementData(f)
@@ -91,7 +105,7 @@ class DataGroup(object):
 
         self._crc = read.usb(f)
         if DEBUG:
-            print('crc value is ' + str(self._crc))
+            print("crc value is " + str(self._crc))
 
         # TODO: check CRC value
 
@@ -99,12 +113,12 @@ class DataGroup(object):
         return self._payload
 
     def is_management_data(self):
-        '''Estimate whether the payload of this packet is
+        """Estimate whether the payload of this packet is
         caption management data (as opposed to caption data itself.
         There appears to be some deviation from the standard, which
         states that the top 6 bits of _group_id should be zero or 0x20
         to qualify as management data.
-        '''
+        """
         return ((self._group_id >> 2) & (~0x20)) == 0
 
 
@@ -114,8 +128,8 @@ def find_data_group_start(f):
     :param f: file descriptor we're reading from typically opened 'rb'
     :return: Boolean describing whether we found a new start pattern or not
     """
-    start_pattern = '\x80\xff\xf0'
-    read_pattern = ''
+    start_pattern = "\x80\xff\xf0"
+    read_pattern = ""
     c = f.read(1)
     while c:
         filepos = f.tell()

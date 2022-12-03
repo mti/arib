@@ -1,12 +1,12 @@
 #!/usr/bin/env python
-'''
+"""
 Module: ts
 Desc: Minimalist MPEG ts packet parsing
 Author: John O'Neil
 Email: oneil.john@gmail.com
 DATE: Thursday, October 20th 2016
 
-'''
+"""
 import os
 import sys
 import argparse
@@ -17,14 +17,13 @@ import mmap
 
 
 class ES:
-    """ very minimalistic Elementary Stream handling
-    """
+    """very minimalistic Elementary Stream handling"""
+
     STREAM_ID_INDEX = 3
 
     @staticmethod
     def pes_packet_check_formedness(payload):
-        """ Check formedness of pes packet and indicate we have the entire payload
-        """
+        """Check formedness of pes packet and indicate we have the entire payload"""
         b1 = payload[0]
         b2 = payload[1]
         b3 = payload[2]
@@ -43,11 +42,11 @@ class ES:
         if len(payload) < 6:
             return 0
         # we add 6 for start code, stream id and pes packet length itself
-        return int.from_bytes(payload[4:6], 'big') + 6
+        return int.from_bytes(payload[4:6], "big") + 6
 
     @staticmethod
     def get_pes_flags(payload):
-        return struct.unpack('>H', payload[6:8])[0]
+        return struct.unpack(">H", payload[6:8])[0]
 
     @staticmethod
     def get_pes_header_length(payload):
@@ -75,8 +74,8 @@ class ES:
 
 
 class TS(object):
-    """ very minimalistic Transport stream handling
-    """
+    """very minimalistic Transport stream handling"""
+
     PACKET_SIZE = 188
 
     # Sync byte
@@ -94,11 +93,11 @@ class TS(object):
     # Packt ID (PID)
     PID_START_INDEX = 1
     PID_LENGTH_BYTES = 2
-    PID_MASK = 0x1fff
+    PID_MASK = 0x1FFF
 
     # Transport Scrambling Control (TSC)
     TSC_INDEX = 3
-    TSC_MASK = 0xc0
+    TSC_MASK = 0xC0
 
     # Adaptation field control
     ADAPTATION_FIELD_CONTROL_INDEX = 3
@@ -110,7 +109,7 @@ class TS(object):
 
     # Continuity counter
     CONTINUITY_COUNTER_INDEX = 3
-    CONTINUITY_COUNTER_MASK = 0x0f
+    CONTINUITY_COUNTER_MASK = 0x0F
 
     # Adaptation field data (if present)
     ADAPTATION_FIELD_LENGTH_INDEX = 4
@@ -124,9 +123,8 @@ class TS(object):
 
     @staticmethod
     def next_packet(filename, memorymap=True):
-        """ Generator to remove a series of TS packets from a TS file
-        """
-        with open(filename, 'rb') as f:
+        """Generator to remove a series of TS packets from a TS file"""
+        with open(filename, "rb") as f:
 
             # memory map the file if necessary (prob requires 64 bit systems)
             _file = f
@@ -147,7 +145,9 @@ class TS(object):
                                 break
                         # didn't find a new start? FAIL
                         if start_byte == 0:
-                            raise Exception("failure to find sync byte in ts packet size.")
+                            raise Exception(
+                                "failure to find sync byte in ts packet size."
+                            )
                             continue
                         remainder = _file.read(TS.PACKET_SIZE - start_byte)
                         packet = packet[start_byte:] + remainder
@@ -157,13 +157,14 @@ class TS(object):
 
     @staticmethod
     def check_packet_formedness(packet):
-        """Check some features of this packet and see if it's well formed or not
-        """
+        """Check some features of this packet and see if it's well formed or not"""
         if len(packet) != TS.PACKET_SIZE:
             raise Exception("Provided input packet string not of correct size")
 
         if packet[0] != TS.SYNC_BYTE:
-            raise Exception("Provided input packet does not begin with correct sync byte.")
+            raise Exception(
+                "Provided input packet does not begin with correct sync byte."
+            )
 
     @staticmethod
     def get_transport_error_indicator(packet):
@@ -179,29 +180,30 @@ class TS(object):
         and return it as a simple integer value.
         Do this as quickly as possible for performance
         """
-        return ((packet[TS.PID_START_INDEX] & 0x1f) << 8) | packet[TS.PID_START_INDEX + 1]
+        return ((packet[TS.PID_START_INDEX] & 0x1F) << 8) | packet[
+            TS.PID_START_INDEX + 1
+        ]
 
     @staticmethod
     def get_tsc(packet):
-        """get value of Transport Scrambling Control indicato
-        """
+        """get value of Transport Scrambling Control indicato"""
         return (packet[TS.TSC_INDEX] & TS.TSC_MASK) >> 6
 
     @staticmethod
     def get_adaptation_field_control(packet):
-        """ get the adaptation field control value for this packet
-        """
-        return (packet[TS.ADAPTATION_FIELD_CONTROL_INDEX] & TS.ADAPTATION_FIELD_CONTROL_MASK) >> 4
+        """get the adaptation field control value for this packet"""
+        return (
+            packet[TS.ADAPTATION_FIELD_CONTROL_INDEX] & TS.ADAPTATION_FIELD_CONTROL_MASK
+        ) >> 4
 
     @staticmethod
     def get_continuity_counter(packet):
-        """ Get the continuity counter value for this packet
-        """
+        """Get the continuity counter value for this packet"""
         return packet[TS.CONTINUITY_COUNTER_INDEX] & TS.CONTINUITY_COUNTER_MASK
 
     @staticmethod
     def get_adaptation_field_length(packet):
-        """ Get the length of the adaptation field for this packet.
+        """Get the length of the adaptation field for this packet.
         Can return 0 if none is present.
         """
         if TS.get_adaptation_field_control(packet) == TS.NO_ADAPTATION_FIELD:
@@ -216,17 +218,19 @@ class TS(object):
 
     @staticmethod
     def get_pcr(packet):
-        """ Get the Program Clock Reference for this packet if present.
+        """Get the Program Clock Reference for this packet if present.
         Can return 0 if data not present.
         """
         if not TS.adaptation_field_present(packet):
             return 0
         if not packet[TS.ADAPTATION_FIELD_DATA_INDEX] & TS.PCR_FLAG_MASK:
             return 0
-        b1 = struct.unpack('>L', packet[TS.PCR_START_INDEX:TS.PCR_START_INDEX + 4])[0]
-        b2 = struct.unpack('>H', packet[TS.PCR_START_INDEX + 4:TS.PCR_START_INDEX + 6])[0]
+        b1 = struct.unpack(">L", packet[TS.PCR_START_INDEX : TS.PCR_START_INDEX + 4])[0]
+        b2 = struct.unpack(
+            ">H", packet[TS.PCR_START_INDEX + 4 : TS.PCR_START_INDEX + 6]
+        )[0]
         base = (b1 << 1) | (b2 >> 15)  # 33 bit base
-        extension = b2 & 0x1ff  # 9 bit extension
+        extension = b2 & 0x1FF  # 9 bit extension
         # TODO: proper extension handling as per the spec
         # returning the base gives us good results currently
         # return base * 300 + extension
@@ -241,15 +245,13 @@ class TS(object):
 
     @staticmethod
     def get_payload_length(packet):
-        """Payload length from an 188 byte ts packet
-        """
+        """Payload length from an 188 byte ts packet"""
         adaptation_field_len = TS.get_adaptation_field_length(packet)
         return 188 - 4 - adaptation_field_len
 
     @staticmethod
     def get_payload(packet):
-        """ return a byte array deep copy of 188 byte ts packet payload
-        """
+        """return a byte array deep copy of 188 byte ts packet payload"""
         # payload_len = get_payload_length(packet)
         adaptation_field_len = TS.get_adaptation_field_length(packet)
         header_size = 4 + adaptation_field_len
@@ -267,7 +269,7 @@ class TS(object):
         self._elementary_streams = {}
 
     def Parse(self):
-        """ Go through the .ts file, and invoke a callback on each TS packet and ES packet
+        """Go through the .ts file, and invoke a callback on each TS packet and ES packet
         Also invoke progress callbacks and packet error callbacks as appropriate
         """
         prev_percent_read = 0
@@ -305,7 +307,9 @@ class TS(object):
                 else:
                     # TODO: throw. this situaiton means out of order packets
                     pass
-            if pid in self._elementary_streams and ES.pes_packet_complete(self._elementary_streams[pid]):
+            if pid in self._elementary_streams and ES.pes_packet_complete(
+                self._elementary_streams[pid]
+            ):
                 # TODO: handle packet contents here (callback)
                 es = self._elementary_streams[pid]
                 if self.OnESPacket:
@@ -362,14 +366,18 @@ def OnESPacket(current_pid, packet, header_size):
 
 
 def main():
-    parser = argparse.ArgumentParser(description='Draw CC Packets from MPG2 Transport Stream file.')
-    parser.add_argument('infile', help='Input filename (MPEG2 Transport Stream File)', type=str)
+    parser = argparse.ArgumentParser(
+        description="Draw CC Packets from MPG2 Transport Stream file."
+    )
+    parser.add_argument(
+        "infile", help="Input filename (MPEG2 Transport Stream File)", type=str
+    )
     args = parser.parse_args()
 
     infilename = args.infile
 
     if not os.path.exists(infilename):
-        print('Input filename :' + infilename + " does not exist.")
+        print("Input filename :" + infilename + " does not exist.")
         os.exit(-1)
 
     ts = TS(infilename)

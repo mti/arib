@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # vim: set ts=2 expandtab:
-'''
+"""
 Module: closed_caption.py
 Desc: ARIB data group container
 Author: John O'Neil
@@ -10,7 +10,7 @@ DATE: Thursday, March 6th 2014
 represents closed caption specific data within
 an ARIB data group
 
-'''
+"""
 
 import read
 from decoder import Decoder
@@ -26,14 +26,14 @@ def set_DRCS_debug(v):
 
 
 class CaptionStatementData(object):
-    '''Represents a closed caption text wrapper
+    """Represents a closed caption text wrapper
     Detailed in table 9-10 in ARIB STD b-24 PG 176
-    '''
+    """
 
     def __init__(self, f):
-        '''
+        """
         :param bytes: array of bytes payload
-        '''
+        """
         self._TMD = read.ucb(f) >> 6
         if self._TMD == 0x1 or self._TMD == 0x2:
             # 36 bit STM time, followed by 4 bit reserved data
@@ -41,15 +41,21 @@ class CaptionStatementData(object):
             # We'll read all that as a single 64 bit value and break it up
             d = read.ulb(f)
             self.STM = d >> 28
-            self._data_unit_loop_length = d & 0xffffffff
+            self._data_unit_loop_length = d & 0xFFFFFFFF
             if DEBUG:
-                print('CaptionStatementData: STM (time) ' + str(self.STM))
-                print('CaptionStatementData: data unit loop length: ' + str(self._data_unit_loop_length))
+                print("CaptionStatementData: STM (time) " + str(self.STM))
+                print(
+                    "CaptionStatementData: data unit loop length: "
+                    + str(self._data_unit_loop_length)
+                )
         else:
             self.STM = 0
             self._data_unit_loop_length = read.ui3b(f)
         if DEBUG:
-            print('Caption statement: data unit loop length: ' + str(self._data_unit_loop_length))
+            print(
+                "Caption statement: data unit loop length: "
+                + str(self._data_unit_loop_length)
+            )
         bytes_read = 0
         self._data_units = []
         while bytes_read < self._data_unit_loop_length:
@@ -57,8 +63,7 @@ class CaptionStatementData(object):
             bytes_read += self._data_units[-1].size()
 
     def load_caption_statement_data(self, data):
-        '''Load class contents from caption statement data payload
-        '''
+        """Load class contents from caption statement data payload"""
         pass
 
 
@@ -70,8 +75,8 @@ def next_data_unit(caption_statement_data):
 
 
 class StatementBody(object):
-    '''Statement body (caption text) in Data Unit
-    '''
+    """Statement body (caption text) in Data Unit"""
+
     ID = 0x20
 
     def __init__(self, f, data_unit):
@@ -79,7 +84,7 @@ class StatementBody(object):
         self._data_unit_type = data_unit._data_unit_type
         if self._data_unit_type != 0x20:
             if DEBUG:
-                print('this is not caption data')
+                print("this is not caption data")
             raise ValueError
         self._data_unit_size = data_unit._data_unit_size
         # self._payload = f.read(self._data_unit_size)
@@ -95,19 +100,23 @@ class StatementBody(object):
 
     @staticmethod
     def parse_contents(f, bytes_to_read):
-        '''
+        """
         Do complex reading of caption data from binary file.
         Return a list of statements and characters
-        '''
+        """
         if DEBUG:
-            print('going to read {bytes} bytes in binary file caption statement.'.format(bytes=bytes_to_read))
+            print(
+                "going to read {bytes} bytes in binary file caption statement.".format(
+                    bytes=bytes_to_read
+                )
+            )
         statements = []
         bytes_read = 0
         # TODO: Check to see if decoder state is carred between packet processing
         # currently recreating the decoder (and therefore resetting its state)
         # on every packet paylod processing. This may be incorrect
         decoder = Decoder()
-        line = ''
+        line = ""
         while bytes_read < bytes_to_read:
             statement = decoder.decode(f)
             if statement:
@@ -124,40 +133,41 @@ class StatementBody(object):
 
 
 class DRCSFont(object):
-    """ A single character in DRCS
+    """A single character in DRCS
     Called a 'font' to agree with Table D-1 in ARIB b-24 spec page 141
     """
+
     # in order to provide SOME kind of info when we encounter a DRCS, i have
     # a small hash table mapping to known (encountered) values.
     # There seems to be at least two new DRCS characters in every .ts file I
     # examine, so this is very limited.
     character_hashes = {
-        -3174437220813644284: '♬',
-        3626218632846089044: '[ｽﾋﾟｰｶｰ]',  # u"\U0001F50A", # unicode 'speaker with 3 sound U+1f50A
-        -7036522249175460012: '[ｽﾋﾟｰｶｰ]',  # u"\U0001F508", # unicode "SPEAKER U+1F508
-        7569189553178784666: '[ﾊﾟｿｺﾝ]',  # u"\U0001F4BB", #unicode personal computer U+1F4BB
-        -7054764751876937278: '[ﾃﾚﾋﾞ]',  # u"\U0001F4FA", # unicode TV U+1f4fa
-        7675785349947576464: '[携帯]',  # u"\U0001F4F1", # unicode cellphone U+1F4F1
-        -8588766517861681222: '｟',
-        -137322149189423910: '｠',
-        -8884896295922033014: '⟪',
-        -5876459750587952470: '⟫',
-        2149867084803144864: '[ﾃﾚﾋﾞ]',  # u"\U0001F4FA", # unicode TV U+1f4fa
-        -6623079553638809300: '[ﾏｲｸ]',
-        -3827305093498498888: '𝔹',  # custom Conan 'meitantei badge". yes. really.
-        -775118510460996568: '｟',
-        -4397084408988046416: '｠',
-        -6328951014288157962: '[ﾊﾟｿｺﾝ]',
-        1113567731799993878: '①',
-        6707059547002745896: '[ﾗｼﾞｵ]',
-        6692026985814559272: '[携帯]',
+        -3174437220813644284: "♬",
+        3626218632846089044: "[ｽﾋﾟｰｶｰ]",  # u"\U0001F50A", # unicode 'speaker with 3 sound U+1f50A
+        -7036522249175460012: "[ｽﾋﾟｰｶｰ]",  # u"\U0001F508", # unicode "SPEAKER U+1F508
+        7569189553178784666: "[ﾊﾟｿｺﾝ]",  # u"\U0001F4BB", #unicode personal computer U+1F4BB
+        -7054764751876937278: "[ﾃﾚﾋﾞ]",  # u"\U0001F4FA", # unicode TV U+1f4fa
+        7675785349947576464: "[携帯]",  # u"\U0001F4F1", # unicode cellphone U+1F4F1
+        -8588766517861681222: "｟",
+        -137322149189423910: "｠",
+        -8884896295922033014: "⟪",
+        -5876459750587952470: "⟫",
+        2149867084803144864: "[ﾃﾚﾋﾞ]",  # u"\U0001F4FA", # unicode TV U+1f4fa
+        -6623079553638809300: "[ﾏｲｸ]",
+        -3827305093498498888: "𝔹",  # custom Conan 'meitantei badge". yes. really.
+        -775118510460996568: "｟",
+        -4397084408988046416: "｠",
+        -6328951014288157962: "[ﾊﾟｿｺﾝ]",
+        1113567731799993878: "①",
+        6707059547002745896: "[ﾗｼﾞｵ]",
+        6692026985814559272: "[携帯]",
     }
 
     # first is  combiled font id + font number four bits each
     def __init__(self, f):
         b = read.ucb(f)
-        self._font_id = (b & 0xf0) >> 8
-        self._mode = (b & 0x0f)
+        self._font_id = (b & 0xF0) >> 8
+        self._mode = b & 0x0F
         if self._mode == 0 or self._mode == 0x1:
             self._depth = read.ucb(f)
             self._width = read.ucb(f)
@@ -178,13 +188,13 @@ class DRCSFont(object):
             if self._hash in DRCSFont.character_hashes:
                 self._character = DRCSFont.character_hashes[self._hash]
             else:
-                self._character = '�'
+                self._character = "�"
 
         else:
             raise ValueError("DRCSFont mode not supported.")
         if DRCS_DEBUG:
             print(("DRCS character: font: {font}".format(font=self._font_id)))
-            px = ''
+            px = ""
             i = 0
             for h in range(self._height / 2):
                 for w in range(self._width / 4):
@@ -192,22 +202,21 @@ class DRCSFont(object):
                     p = self._pixels[h * self._width / 2 + w]
                     if p == 0:
                         px += " "
-                    elif p == 0xff:
+                    elif p == 0xFF:
                         px += "█"
-                    elif p == 0x0f:
+                    elif p == 0x0F:
                         px += "▐"
-                    elif p == 0xf0:
+                    elif p == 0xF0:
                         px += "▌"
                     else:
                         px += "╳"
                     i = i + 1
-                px += '\n'
+                px += "\n"
             print(px)
 
 
 class DRCSCharacter(object):
-    """ DRCS character parsed by DRCS2ByteCharacter class
-    """
+    """DRCS character parsed by DRCS2ByteCharacter class"""
 
     def __init__(self, f):
         """
@@ -221,9 +230,10 @@ class DRCSCharacter(object):
 
 
 class DRCS1ByteCharacter(object):
-    """ DRCS data structure
+    """DRCS data structure
     Describes custom character data delivered at runtime in the TS stream
     """
+
     ID = 0x30
 
     def __init__(self, f, data_unit):
@@ -231,7 +241,7 @@ class DRCS1ByteCharacter(object):
         self._data_unit_type = data_unit._data_unit_type
         if self._data_unit_type is not DRCS1ByteCharacter.ID:
             if DEBUG:
-                print('this is not a DRCS character')
+                print("this is not a DRCS character")
             raise ValueError
         self._data_unit_size = data_unit._data_unit_size
         self._characters = []
@@ -248,21 +258,20 @@ class DRCS1ByteCharacter(object):
 
 
 class DataUnit(object):
-    '''Data Unit structure as defined in ARIB B-24 Table 9-12 pg 157
-    '''
+    """Data Unit structure as defined in ARIB B-24 Table 9-12 pg 157"""
 
     def __init__(self, f):
         self._unit_separator = read.ucb(f)
-        if (self._unit_separator != 0x1f):
+        if self._unit_separator != 0x1F:
             if DEBUG:
-                print('Unit separator not found at start of data unit.')
+                print("Unit separator not found at start of data unit.")
             raise ValueError
         self._data_unit_type = read.ucb(f)
         if DEBUG:
-            print('data unit type: ' + str(self._data_unit_type))
+            print("data unit type: " + str(self._data_unit_type))
         self._data_unit_size = read.ui3b(f)
         if DEBUG:
-            print('DataUnit size found to be: ' + str(self._data_unit_size))
+            print("DataUnit size found to be: " + str(self._data_unit_size))
         # self._payload = f.read(self._data_unit_size)
         self._payload = self.load_unit(f)
 
@@ -270,8 +279,7 @@ class DataUnit(object):
         return self._payload
 
     def size(self):
-        '''return size of inflated data unit in bytes
-        '''
+        """return size of inflated data unit in bytes"""
         return self._data_unit_size + 5
 
     def load_unit(self, f):
@@ -299,7 +307,7 @@ class Language(object):
         if DEBUG:
             print(("caption managment DC: " + str(self._DC)))
 
-        self._language_code = ''
+        self._language_code = ""
         self._language_code += str(chr(read.ucb(f)))
         self._language_code += str(chr(read.ucb(f)))
         self._language_code += str(chr(read.ucb(f)))
@@ -321,6 +329,7 @@ class CaptionManagementData(object):
     Describes caption managment data as per Arib b24 std
     table 9-3 on p173
     """
+
     # Time control (TMD) values as pert table 9-4
     TIME_CONTROL_FREE = 0b0
     TIME_CONTROL_REALTIME = 0b1
@@ -342,7 +351,7 @@ class CaptionManagementData(object):
 
     @staticmethod
     def display_format(format):
-        """ Caption managment format code to string
+        """Caption managment format code to string
         After Arib b24 std table9-7 p175
         """
         if format == 0x0:
@@ -363,13 +372,13 @@ class CaptionManagementData(object):
             return "Horizontal writing in 960x540:"
         if format == 0x9:
             return "Vertical writing in 960x540:"
-        if format == 0xa:
+        if format == 0xA:
             return "Horizontal writing in 1280x720:"
-        if format == 0xb:
+        if format == 0xB:
             return "Vertical writing in 1280x720:"
-        if format == 0xc:
+        if format == 0xC:
             return "Horizontal writing in 720x480:"
-        if format == 0xd:
+        if format == 0xD:
             return "Vertical writing in 720x480:"
         else:
             return "invalid caption managment format value."
@@ -381,8 +390,7 @@ class CaptionManagementData(object):
         return self._languages[language]._language_code
 
     def __init__(self, f):
-        """
-        """
+        """"""
         self.TMD = read.ucb(f) >> 6
         if self.TMD == 0b10:
             _t = read.uib(f)
@@ -398,7 +406,10 @@ class CaptionManagementData(object):
 
         self._data_unit_loop_length = read.ui3b(f)
         if DEBUG:
-            print('Caption managmentdata : data unit loop length: ' + str(self._data_unit_loop_length))
+            print(
+                "Caption managmentdata : data unit loop length: "
+                + str(self._data_unit_loop_length)
+            )
         bytes_read = 0
         self._data_units = []
         while bytes_read < self._data_unit_loop_length:

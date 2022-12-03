@@ -17,40 +17,43 @@ from setuptools import setup
 # version 0.6.4: Fixes to issues #27, #33 (subtitle positions in generatd .ass files).
 # version 0.6.5: Fixes for issues #41, #43, #44: General file handling
 
+
 def readme():
-    with open('README.md') as f:
+    with open("README.md") as f:
         return f.read()
 
 
 def requirements():
-    with open('requirements.txt') as f:
+    with open("requirements.txt") as f:
         return f.read().splitlines()
 
 
-setup(name='arib',
-      version='0.6.5',
-      description='Japan Association of Radio Industries and Businesses (ARIB) MPEG2 Transport Stream Closed Caption Decoding Tools',
-      long_description=readme(),
-      classifiers=[
-          'Development Status :: 3 - Alpha',
-          'License :: OSI Approved :: MIT License',
-          'Programming Language :: Python :: 2.7',
-          'Topic :: Multimedia :: Sound/Audio :: Conversion',
-      ],
-      keywords='Japanese Closed Caption arib b-24 MPEG TS PES',
-      url='https://github.com/johnoneil/arib',
-      author='John O\'Neil',
-      author_email='oneil.john@gmail.com',
-      license='MIT',
-      packages=[
-          'arib',
-      ],
-      install_requires=requirements(),
-      entry_points={
-          'console_scripts': [
-              'arib-ts2ass=arib.ts2ass:main',
-              'arib-ts-extract=arib.ts_extract:main',
-              'arib-es-extract=arib.es_extract:main',
-          ],
-      },
-      zip_safe=True)
+setup(
+    name="arib",
+    version="0.6.5",
+    description="Japan Association of Radio Industries and Businesses (ARIB) MPEG2 Transport Stream Closed Caption Decoding Tools",
+    long_description=readme(),
+    classifiers=[
+        "Development Status :: 3 - Alpha",
+        "License :: OSI Approved :: MIT License",
+        "Programming Language :: Python :: 2.7",
+        "Topic :: Multimedia :: Sound/Audio :: Conversion",
+    ],
+    keywords="Japanese Closed Caption arib b-24 MPEG TS PES",
+    url="https://github.com/johnoneil/arib",
+    author="John O'Neil",
+    author_email="oneil.john@gmail.com",
+    license="MIT",
+    packages=[
+        "arib",
+    ],
+    install_requires=requirements(),
+    entry_points={
+        "console_scripts": [
+            "arib-ts2ass=arib.ts2ass:main",
+            "arib-ts-extract=arib.ts_extract:main",
+            "arib-es-extract=arib.es_extract:main",
+        ],
+    },
+    zip_safe=True,
+)

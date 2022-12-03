@@ -1,12 +1,12 @@
 #!/usr/bin/env python
-'''
+"""
 Module: es-extract
 Desc: Extract ARIB closed caption info from a previously demuxed Elementary Stream
 Author: John O'Neil
 Email: oneil.john@gmail.com
 DATE: Saturday January 14th 2017
 
-'''
+"""
 import os
 import sys
 import argparse
@@ -70,11 +70,11 @@ DISPLAYED_CC_STATEMENTS = [
 
 
 def formatter(statements, timestamp):
-    '''Turn a list of decoded closed caption statements
-      into something we want (probably just plain text)
-      Note we deal with unicode only here.
-    '''
-    line = ''.join([str(s) for s in statements if type(s) in DISPLAYED_CC_STATEMENTS])
+    """Turn a list of decoded closed caption statements
+    into something we want (probably just plain text)
+    Note we deal with unicode only here.
+    """
+    line = "".join([str(s) for s in statements if type(s) in DISPLAYED_CC_STATEMENTS])
     return line
 
 
@@ -89,18 +89,26 @@ def main():
     global VERBOSE
     global SILENT
 
-    parser = argparse.ArgumentParser(description='Draw CC Packets from MPG2 Transport Stream file.')
-    parser.add_argument('infile', help='Input filename (MPEG2 Transport Stream File)', type=str)
-    parser.add_argument('-p', '--pid',
-                        help='Specify a PID of a PES known to contain closed caption info (tool will attempt to find the proper PID if not specified.).',
-                        type=int, default=-1)
+    parser = argparse.ArgumentParser(
+        description="Draw CC Packets from MPG2 Transport Stream file."
+    )
+    parser.add_argument(
+        "infile", help="Input filename (MPEG2 Transport Stream File)", type=str
+    )
+    parser.add_argument(
+        "-p",
+        "--pid",
+        help="Specify a PID of a PES known to contain closed caption info (tool will attempt to find the proper PID if not specified.).",
+        type=int,
+        default=-1,
+    )
     args = parser.parse_args()
 
     infilename = args.infile
     pid = args.pid
 
     if not os.path.exists(infilename):
-        print('Input filename :' + infilename + " does not exist.")
+        print("Input filename :" + infilename + " does not exist.")
         os.exit(-1)
 
     for data_group in next_data_group(infilename):
@@ -122,13 +130,18 @@ def main():
                         # your encoding of choice as late as possible. Here, i'm encoding as UTF-8 for
                         # my command line.
                         # DECODE EARLY, ENCODE LATE
-                        print((cc.encode('utf-8')))
+                        print((cc.encode("utf-8")))
             else:
                 # management data
                 management_data = data_group.payload()
                 for language in range(management_data.num_languages()):
-                    print(("<Closed caption management data for language: " +
-                          management_data.language_code(language) + ">"))
+                    print(
+                        (
+                            "<Closed caption management data for language: "
+                            + management_data.language_code(language)
+                            + ">"
+                        )
+                    )
         except EOFError:
             pass
         except Exception as err:

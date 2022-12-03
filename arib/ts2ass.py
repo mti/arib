@@ -59,8 +59,7 @@ def win32_unicode_argv():
     if argc.value > 0:
         # Remove Python executable and commands if present
         start = argc.value - len(sys.argv)
-        return [argv[i] for i in
-                range(start, argc.value)]
+        return [argv[i] for i in range(start, argc.value)]
 
 
 sys.argv = win32_unicode_argv()
@@ -92,7 +91,13 @@ def OnProgress(bytes_read, total_bytes):
     global SILENT
     global pbar
     if not pbar:
-        pbar = tqdm(total=total_bytes, unit='B', unit_scale=True, unit_divisor=1024, miniters=1000000)
+        pbar = tqdm(
+            total=total_bytes,
+            unit="B",
+            unit_scale=True,
+            unit_divisor=1024,
+            miniters=1000000,
+        )
     if VERBOSE and not SILENT:
         pbar.update(bytes_read)
 
@@ -176,9 +181,14 @@ def OnESPacket(current_pid, packet, header_size):
             if pid < 0 and numlang > 0:
                 for language in range(numlang):
                     if not SILENT:
-                        print(("Closed caption management data for language: "
-                              + management_data.language_code(language)
-                              + " available in PID: " + str(current_pid)))
+                        print(
+                            (
+                                "Closed caption management data for language: "
+                                + management_data.language_code(language)
+                                + " available in PID: "
+                                + str(current_pid)
+                            )
+                        )
                         print("Will now only process this PID to improve performance.")
                 pid = current_pid
 
@@ -189,8 +199,12 @@ def OnESPacket(current_pid, packet, header_size):
         raise ex
     except Exception as err:
         if not SILENT and pid >= 0:
-            print(("Exception thrown while handling DataGroup in ES. This may be due to many factors"
-                  + "such as file corruption or the .ts file using as yet unsupported features."))
+            print(
+                (
+                    "Exception thrown while handling DataGroup in ES. This may be due to many factors"
+                    + "such as file corruption or the .ts file using as yet unsupported features."
+                )
+            )
             traceback.print_exc(file=sys.stdout)
 
 
@@ -204,18 +218,43 @@ def main():
     global time_offset
 
     parser = argparse.ArgumentParser(
-        description='Remove ARIB formatted Closed Caption information from an MPEG TS file and format the results as a standard .ass subtitle file.')
-    parser.add_argument('infile', help='Input filename (MPEG2 Transport Stream File)', type=str)
-    parser.add_argument('-o', '--outfile', help='Output filename (.ass subtitle file)', type=str, default=None)
-    parser.add_argument('-p', '--pid',
-                        help='Specify a PID of a PES known to contain closed caption info (tool will attempt to find the proper PID if not specified.).',
-                        type=int, default=-1)
-    parser.add_argument('-v', '--verbose', help='Verbose output.', action='store_true')
-    parser.add_argument('-q', '--quiet', help='Does not write to stdout.', action='store_true')
-    parser.add_argument('-t', '--tmax', help='Subtitle display time limit (seconds).', type=int, default=5)
-    parser.add_argument('-m', '--timeoffset',
-                        help='Shift all time values in generated .ass file by indicated floating point offset in seconds.',
-                        type=float, default=0.0)
+        description="Remove ARIB formatted Closed Caption information from an MPEG TS file and format the results as a standard .ass subtitle file."
+    )
+    parser.add_argument(
+        "infile", help="Input filename (MPEG2 Transport Stream File)", type=str
+    )
+    parser.add_argument(
+        "-o",
+        "--outfile",
+        help="Output filename (.ass subtitle file)",
+        type=str,
+        default=None,
+    )
+    parser.add_argument(
+        "-p",
+        "--pid",
+        help="Specify a PID of a PES known to contain closed caption info (tool will attempt to find the proper PID if not specified.).",
+        type=int,
+        default=-1,
+    )
+    parser.add_argument("-v", "--verbose", help="Verbose output.", action="store_true")
+    parser.add_argument(
+        "-q", "--quiet", help="Does not write to stdout.", action="store_true"
+    )
+    parser.add_argument(
+        "-t",
+        "--tmax",
+        help="Subtitle display time limit (seconds).",
+        type=int,
+        default=5,
+    )
+    parser.add_argument(
+        "-m",
+        "--timeoffset",
+        help="Shift all time values in generated .ass file by indicated floating point offset in seconds.",
+        type=float,
+        default=0.0,
+    )
     args = parser.parse_args()
 
     pid = args.pid
@@ -230,7 +269,7 @@ def main():
     time_offset = args.timeoffset
 
     if not os.path.exists(infilename) and not SILENT:
-        print('Input filename :' + infilename + " does not exist.")
+        print("Input filename :" + infilename + " does not exist.")
         sys.exit(-1)
 
     ts = TS(infilename)
@@ -242,11 +281,23 @@ def main():
     ts.Parse()
 
     if pid < 0 and not SILENT:
-        print(("*** Sorry. No ARIB subtitle content was found in file: " + infilename + " ***"))
+        print(
+            (
+                "*** Sorry. No ARIB subtitle content was found in file: "
+                + infilename
+                + " ***"
+            )
+        )
         sys.exit(-1)
 
     if ass and not ass.file_written() and not SILENT:
-        print(("*** Sorry. No nonempty ARIB closed caption content found in file " + infilename + " ***"))
+        print(
+            (
+                "*** Sorry. No nonempty ARIB closed caption content found in file "
+                + infilename
+                + " ***"
+            )
+        )
         sys.exit(-1)
 
     sys.exit(0)
