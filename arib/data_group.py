@@ -50,37 +50,37 @@ class DataGroup(object):
 
         self._stuffing_byte = read.ucb(f)
         if DEBUG:
-            print hex(self._stuffing_byte)
+            print(hex(self._stuffing_byte))
         if (self._stuffing_byte is not 0x80):
             raise DataGroupParseError("Initial stuffing byte not equal to 0x80: " + hex(self._stuffing_byte))
 
         self._data_identifier = read.ucb(f)
         if DEBUG:
-            print hex(self._data_identifier)
+            print(hex(self._data_identifier))
         if self._data_identifier is not 0xff:
             raise DataGroupParseError("Initial data identifier is not equal to 0xff" + hex(self._data_identifier))
 
         self._private_stream_id = read.ucb(f)
         if DEBUG:
-            print hex(self._private_stream_id)
+            print(hex(self._private_stream_id))
         if self._private_stream_id is not 0xf0:
             raise DataGroupParseError("Private stream id not equal to 0xf0: " + hex(self._private_stream_id))
 
         self._group_id = read.ucb(f)
         if DEBUG:
-            print 'group id ' + str((self._group_id >> 2) & (~0x20))
+            print('group id ' + str((self._group_id >> 2) & (~0x20)))
         self._group_link_number = read.ucb(f)
         if DEBUG:
-            print str(self._group_link_number)
+            print(str(self._group_link_number))
         self._last_group_link_number = read.ucb(f)
         if DEBUG:
-            print str(self._last_group_link_number)
+            print(str(self._last_group_link_number))
         if self._group_link_number != self._last_group_link_number:
-            print("This is data group packet " + str(self._group_link_number) + " of " + str(
-                self._last_group_link_number))
+            print(("This is data group packet " + str(self._group_link_number) + " of " + str(
+                self._last_group_link_number)))
         self._data_group_size = read.usb(f)
         if DEBUG:
-            print 'data group size found is ' + str(self._data_group_size)
+            print('data group size found is ' + str(self._data_group_size))
 
         if not self.is_management_data():
             self._payload = CaptionStatementData(f)
@@ -91,7 +91,7 @@ class DataGroup(object):
 
         self._crc = read.usb(f)
         if DEBUG:
-            print 'crc value is ' + str(self._crc)
+            print('crc value is ' + str(self._crc))
 
         # TODO: check CRC value
 
@@ -139,7 +139,7 @@ def next_data_group(filepath):
                 data_group = DataGroup(f)
             except EOFError:
                 break
-            except Exception, err:
+            except Exception as err:
                 print("Exception throw while parsing data group from .es")
                 traceback.print_exc(file=sys.stdout)
                 print("Looking for new data group in .es")
@@ -152,7 +152,7 @@ def next_data_group(filepath):
     except EOFError:
         # we can quite rightly run into eof here. in that case just bail
         pass
-    except Exception, err:
+    except Exception as err:
         print("Exception throw while parsing data group from .es")
         traceback.print_exc(file=sys.stdout)
     finally:

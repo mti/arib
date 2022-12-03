@@ -74,7 +74,7 @@ def formatter(statements, timestamp):
       into something we want (probably just plain text)
       Note we deal with unicode only here.
     '''
-    line = u''.join([unicode(s) for s in statements if type(s) in DISPLAYED_CC_STATEMENTS])
+    line = ''.join([str(s) for s in statements if type(s) in DISPLAYED_CC_STATEMENTS])
     return line
 
 
@@ -100,7 +100,7 @@ def main():
     pid = args.pid
 
     if not os.path.exists(infilename):
-        print 'Input filename :' + infilename + " does not exist."
+        print('Input filename :' + infilename + " does not exist.")
         os.exit(-1)
 
     for data_group in next_data_group(infilename):
@@ -122,16 +122,16 @@ def main():
                         # your encoding of choice as late as possible. Here, i'm encoding as UTF-8 for
                         # my command line.
                         # DECODE EARLY, ENCODE LATE
-                        print(cc.encode('utf-8'))
+                        print((cc.encode('utf-8')))
             else:
                 # management data
                 management_data = data_group.payload()
                 for language in range(management_data.num_languages()):
-                    print("<Closed caption management data for language: " +
-                          management_data.language_code(language) + ">")
+                    print(("<Closed caption management data for language: " +
+                          management_data.language_code(language) + ">"))
         except EOFError:
             pass
-        except Exception, err:
+        except Exception as err:
             print("Exception thrown while handling .es datagroup post parsing.")
             traceback.print_exc(file=sys.stdout)
 

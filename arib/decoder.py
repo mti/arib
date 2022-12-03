@@ -77,7 +77,7 @@ class Decoder(object):
         '''
         b = read.ucb(f)
         if DEBUG:
-            print '-->{:02x}'.format(b)
+            print('-->{:02x}'.format(b))
         # the interpretation and how many more bytes we have to read
         # depends upon:
         # 1) What code table is this character in? c0? GR? GL? etc.

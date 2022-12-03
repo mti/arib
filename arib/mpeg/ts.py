@@ -140,7 +140,7 @@ class TS(object):
                     # but if it isn't find one.
                     if packet[0] != TS.SYNC_BYTE:
                         start_byte = 0
-                        print packet[0]
+                        print(packet[0])
                         for i in range(start_byte, TS.PACKET_SIZE):
                             if packet[i] == TS.SYNC_BYTE:
                                 start_byte = i
@@ -375,7 +375,7 @@ def main():
     infilename = args.infile
 
     if not os.path.exists(infilename):
-        print 'Input filename :' + infilename + " does not exist."
+        print('Input filename :' + infilename + " does not exist.")
         os.exit(-1)
 
     ts = TS(infilename)
