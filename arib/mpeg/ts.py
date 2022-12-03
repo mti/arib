@@ -81,7 +81,7 @@ class TS(object):
 
     # Sync byte
     SYNC_BYTE_INDEX = 0
-    SYNC_BYTE = 'G'
+    SYNC_BYTE = 71
 
     # Transport Error Indicator (TEI)
     TEI_INDEX = 1
