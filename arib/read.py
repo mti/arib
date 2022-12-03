@@ -59,7 +59,7 @@ def usb(f):
     else:
         _f = f.read(2)
         if DEBUG:
-            print(("usb: " + hex(ord(_f[0])) + ":" + hex(ord(_f[1]))))
+            print(("usb: " + hex(_f[0]) + ":" + hex(_f[1])))
         if len(_f) < 2:
             raise EOFError()
         return struct.unpack('>H', _f)[0]

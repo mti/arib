@@ -77,7 +77,7 @@ class StatementBody(object):
     def __init__(self, f, data_unit):
         self._unit_separator = data_unit._unit_separator
         self._data_unit_type = data_unit._data_unit_type
-        if self._data_unit_type is not 0x20:
+        if self._data_unit_type != 0x20:
             if DEBUG:
                 print('this is not caption data')
             raise ValueError
@@ -253,7 +253,7 @@ class DataUnit(object):
 
     def __init__(self, f):
         self._unit_separator = read.ucb(f)
-        if (self._unit_separator is not 0x1f):
+        if (self._unit_separator != 0x1f):
             if DEBUG:
                 print('Unit separator not found at start of data unit.')
             raise ValueError

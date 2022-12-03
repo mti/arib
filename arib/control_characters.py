@@ -1451,7 +1451,7 @@ class CSI(object):
         '''
         self._args = []
         c = read.ucb(f)
-        while c is not 0x20:
+        while c != 0x20:
             self._args.append(c)
             c = read.ucb(f)
         self._args.append(c)

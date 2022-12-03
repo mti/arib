@@ -25,18 +25,18 @@ class ES:
     def pes_packet_check_formedness(payload):
         """ Check formedness of pes packet and indicate we have the entire payload
         """
-        b1 = ord(payload[0])
-        b2 = ord(payload[1])
-        b3 = ord(payload[2])
+        b1 = payload[0]
+        b2 = payload[1]
+        b3 = payload[2]
 
-        b4 = ord(payload[3])
+        b4 = payload[3]
         if b1 != 0 or b2 != 0 or b3 != 1:
             return False
         return True
 
     @staticmethod
     def get_pes_stream_id(payload):
-        return ord(payload[ES.STREAM_ID_INDEX])
+        return payload[ES.STREAM_ID_INDEX]
 
     @staticmethod
     def get_pes_packet_length(payload):
@@ -56,7 +56,7 @@ class ES:
         # value at byte 8 gives the remaining bytes in the header including stuffing
         if len(payload) < 9:
             return 0
-        return 6 + 3 + ord(payload[8])
+        return 6 + 3 + payload[8]
 
     @staticmethod
     def get_pes_payload_length(payload):
@@ -167,11 +167,11 @@ class TS(object):
 
     @staticmethod
     def get_transport_error_indicator(packet):
-        return (ord(packet[TS.TEI_INDEX]) & TS.TEI_MASK) != 0
+        return (packet[TS.TEI_INDEX] & TS.TEI_MASK) != 0
 
     @staticmethod
     def get_payload_start(packet):
-        return (ord(packet[TS.PUSI_INDEX]) & TS.PUSI_MASK) != 0
+        return (packet[TS.PUSI_INDEX] & TS.PUSI_MASK) != 0
 
     @staticmethod
     def get_pid(packet):
@@ -179,25 +179,25 @@ class TS(object):
         and return it as a simple integer value.
         Do this as quickly as possible for performance
         """
-        return ((ord(packet[TS.PID_START_INDEX]) & 0x1f) << 8) | ord(packet[TS.PID_START_INDEX + 1])
+        return ((packet[TS.PID_START_INDEX] & 0x1f) << 8) | packet[TS.PID_START_INDEX + 1]
 
     @staticmethod
     def get_tsc(packet):
         """get value of Transport Scrambling Control indicato
         """
-        return (ord(packet[TS.TSC_INDEX]) & TS.TSC_MASK) >> 6
+        return (packet[TS.TSC_INDEX] & TS.TSC_MASK) >> 6
 
     @staticmethod
     def get_adaptation_field_control(packet):
         """ get the adaptation field control value for this packet
         """
-        return (ord(packet[TS.ADAPTATION_FIELD_CONTROL_INDEX]) & TS.ADAPTATION_FIELD_CONTROL_MASK) >> 4
+        return (packet[TS.ADAPTATION_FIELD_CONTROL_INDEX] & TS.ADAPTATION_FIELD_CONTROL_MASK) >> 4
 
     @staticmethod
     def get_continuity_counter(packet):
         """ Get the continuity counter value for this packet
         """
-        return ord(packet[TS.CONTINUITY_COUNTER_INDEX]) & TS.CONTINUITY_COUNTER_MASK
+        return packet[TS.CONTINUITY_COUNTER_INDEX] & TS.CONTINUITY_COUNTER_MASK
 
     @staticmethod
     def get_adaptation_field_length(packet):
@@ -208,7 +208,7 @@ class TS(object):
             return 0
 
         # we add one byte here for the adaptation field length data itself
-        return ord(packet[TS.ADAPTATION_FIELD_LENGTH_INDEX]) + 1
+        return packet[TS.ADAPTATION_FIELD_LENGTH_INDEX] + 1
 
     @staticmethod
     def adaptation_field_present(packet):
@@ -221,7 +221,7 @@ class TS(object):
         """
         if not TS.adaptation_field_present(packet):
             return 0
-        if not ord(packet[TS.ADAPTATION_FIELD_DATA_INDEX]) & TS.PCR_FLAG_MASK:
+        if not packet[TS.ADAPTATION_FIELD_DATA_INDEX] & TS.PCR_FLAG_MASK:
             return 0
         b1 = struct.unpack('>L', packet[TS.PCR_START_INDEX:TS.PCR_START_INDEX + 4])[0]
         b2 = struct.unpack('>H', packet[TS.PCR_START_INDEX + 4:TS.PCR_START_INDEX + 6])[0]

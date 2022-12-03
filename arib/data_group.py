@@ -51,19 +51,19 @@ class DataGroup(object):
         self._stuffing_byte = read.ucb(f)
         if DEBUG:
             print(hex(self._stuffing_byte))
-        if (self._stuffing_byte is not 0x80):
+        if (self._stuffing_byte != 0x80):
             raise DataGroupParseError("Initial stuffing byte not equal to 0x80: " + hex(self._stuffing_byte))
 
         self._data_identifier = read.ucb(f)
         if DEBUG:
             print(hex(self._data_identifier))
-        if self._data_identifier is not 0xff:
+        if self._data_identifier != 0xff:
             raise DataGroupParseError("Initial data identifier is not equal to 0xff" + hex(self._data_identifier))
 
         self._private_stream_id = read.ucb(f)
         if DEBUG:
             print(hex(self._private_stream_id))
-        if self._private_stream_id is not 0xf0:
+        if self._private_stream_id != 0xf0:
             raise DataGroupParseError("Private stream id not equal to 0xf0: " + hex(self._private_stream_id))
 
         self._group_id = read.ucb(f)

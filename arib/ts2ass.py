@@ -87,8 +87,9 @@ def OnProgress(bytes_read, total_bytes, percent):
     """
     global VERBOSE
     global SILENT
-    if not VERBOSE and not SILENT:
-        sys.stdout.write("progress: %.2f%%   \r" % (percent))
+    if VERBOSE and not SILENT:
+        # TODO TQDM
+        print("progress: %.2f%%   \r" % (percent))
         sys.stdout.flush()
 
 
