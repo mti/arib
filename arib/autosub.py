@@ -12,26 +12,26 @@ Stab at simple auto subtitling japanese programs via their Closed captions
 embedded in MPEG Transport Stream data.
   
 '''
-from arib.bing import translate
-import arib.code_set as code_set
-import arib.control_characters as control_characters
+from bing import translate
+import code_set as code_set
+import control_characters as control_characters
 import codecs
 import re
 
 import os
 import argparse
 import copy
-from arib.data_group import next_data_group
-from arib.closed_caption import next_data_unit
-from arib.closed_caption import StatementBody
-import arib.code_set as code_set
-import arib.control_characters as control_characters
-from arib.ts import next_ts_packet
-from arib.ts import next_pes_packet
-from arib.ts import PESPacket
-from arib.data_group import DataGroup
-from arib.secret_key import SECRET_KEY
-from arib.secret_key import CLIENT_ID
+from data_group import next_data_group
+from closed_caption import next_data_unit
+from closed_caption import StatementBody
+import code_set as code_set
+import control_characters as control_characters
+from ts import next_ts_packet
+from ts import next_pes_packet
+from ts import PESPacket
+from data_group import DataGroup
+from secret_key import SECRET_KEY
+from secret_key import CLIENT_ID
 
 
 class Pos(object):

@@ -17,16 +17,16 @@ import traceback
 
 from read import EOFError
 
-from arib.closed_caption import next_data_unit
-from arib.closed_caption import StatementBody
-from arib.data_group import DataGroup
+from closed_caption import next_data_unit
+from closed_caption import StatementBody
+from data_group import DataGroup
 from arib_exceptions import FileOpenError
 
 from mpeg.ts import TS
 from mpeg.ts import ES
 
-from arib.ass import ASSFormatter
-from arib.ass import ASSFile
+from ass import ASSFormatter
+from ass import ASSFile
 
 import sys
 
@@ -92,7 +92,7 @@ def OnProgress(bytes_read, total_bytes):
     global SILENT
     global pbar
     if not pbar:
-        pbar = tqdm(total=total_bytes, unit='B', unit_scale=True, unit_divisor=1024, miniters=1)
+        pbar = tqdm(total=total_bytes, unit='B', unit_scale=True, unit_divisor=1024, mininterval=1)
     if VERBOSE and not SILENT:
         pbar.update(bytes_read)
 

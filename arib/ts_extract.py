@@ -16,14 +16,14 @@ from read import EOFError
 from mpeg.ts import TS
 from mpeg.ts import ES
 
-from arib.closed_caption import next_data_unit
-from arib.closed_caption import StatementBody
-import arib.code_set as code_set
-import arib.control_characters as control_characters
-from arib.data_group import DataGroup
+from closed_caption import next_data_unit
+from closed_caption import StatementBody
+import code_set as code_set
+import control_characters as control_characters
+from data_group import DataGroup
 
 # print out some additional info for DRCS values
-from arib.closed_caption import set_DRCS_debug
+from closed_caption import set_DRCS_debug
 
 set_DRCS_debug(True)
 
