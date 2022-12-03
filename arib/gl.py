@@ -7,7 +7,7 @@ Email: oneil.john@gmail.com
 DATE: Friday, March 15th 2014
 
 '''
-from . import read
+import read
 
 
 def in_area(b):
