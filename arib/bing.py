@@ -16,39 +16,41 @@ import json
 import requests
 import urllib
 
-def translate(text, from_language=u'ja', to_language=u'en', client_id=u'', secret_key=u''):
-  if not secret_key:
-    raise Exception(u'No Microsoft Azure secret key provided on bing.translate call.')
 
-  args = {
-          'client_id': client_id.encode('utf8'),
-          'client_secret': secret_key.encode('utf-8'),#your azure secret here
-          'scope': 'http://api.microsofttranslator.com',
-          'grant_type': 'client_credentials'
-      }
-  oauth_url = u'https://datamarket.accesscontrol.windows.net/v2/OAuth2-13'
-  oauth_junk = json.loads(requests.post(oauth_url,data=urllib.urlencode(args)).content)
-  translation_args = {
-          'text': text.encode('utf-8'),
-          'to': to_language.encode('utf-8'),
-          'from': from_language.encode('utf-8'),
-          }
-  headers={'Authorization': 'Bearer '+oauth_junk['access_token']}
-  translation_url = 'http://api.microsofttranslator.com/V2/Ajax.svc/Translate?'
-  translation_result = requests.get(translation_url+urllib.urlencode(translation_args),headers=headers)
-  return translation_result.content.decode('utf-8')
+def translate(text, from_language=u'ja', to_language=u'en', client_id=u'', secret_key=u''):
+    if not secret_key:
+        raise Exception(u'No Microsoft Azure secret key provided on bing.translate call.')
+
+    args = {
+        'client_id': client_id.encode('utf8'),
+        'client_secret': secret_key.encode('utf-8'),  # your azure secret here
+        'scope': 'http://api.microsofttranslator.com',
+        'grant_type': 'client_credentials'
+    }
+    oauth_url = u'https://datamarket.accesscontrol.windows.net/v2/OAuth2-13'
+    oauth_junk = json.loads(requests.post(oauth_url, data=urllib.urlencode(args)).content)
+    translation_args = {
+        'text': text.encode('utf-8'),
+        'to': to_language.encode('utf-8'),
+        'from': from_language.encode('utf-8'),
+    }
+    headers = {'Authorization': 'Bearer ' + oauth_junk['access_token']}
+    translation_url = 'http://api.microsofttranslator.com/V2/Ajax.svc/Translate?'
+    translation_result = requests.get(translation_url + urllib.urlencode(translation_args), headers=headers)
+    return translation_result.content.decode('utf-8')
+
 
 def main():
+    parser = argparse.ArgumentParser(description='Exercise bing translation api.')
+    parser.add_argument('text', help='Input filename (MPEG2 Elmentary Stream)', type=str)
+    parser.add_argument('-k', '--secret_key', help='Windows secret key for bing translate API.', type=str, default='')
+    args = parser.parse_args()
 
-  parser = argparse.ArgumentParser(description='Exercise bing translation api.')
-  parser.add_argument('text', help='Input filename (MPEG2 Elmentary Stream)', type=str)
-  parser.add_argument('-k', '--secret_key', help='Windows secret key for bing translate API.', type=str, default='')
-  args = parser.parse_args()
+    text = args.text
+    secret_key = args.secret_key
+    translation = translate(text, secret_key=secret_key)
+    print(translation)
 
-  text = args.text
-  secret_key = args.secret_key
-  translation = translate(text, secret_key=secret_key)
-  print(translation)
 
 if __name__ == "__main__":
-  main()
+    main()
