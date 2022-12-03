@@ -166,10 +166,9 @@ class Kanji(object):
             self._character = Gaiji.decode(self._args)
         else:
             # form utf-8 encoding of character
-            s = ''.join('{:02x}'.format(a | 0x80) for a in self._args)
-            h = s.decode('hex')
+            s = bytes((a | 0x80) for a in self._args)
             try:
-                self._character = h.decode('euc-jisx0213')
+                self._character = s.decode('euc-jisx0213')
             except:
                 self._character = '◻'
         if DEBUG:
@@ -201,9 +200,8 @@ class Alphanumeric(object):
         self._args = []
         self._args.append(b)
 
-        s = ''.join('{:02x}'.format(a) for a in self._args)
-        h = s.decode('hex')
-        self._character = h.decode('ascii')
+        s = bytes(self._args)
+        self._character = s.decode('ascii')
         if self._character == '\\':
             self._character = '¥'
 

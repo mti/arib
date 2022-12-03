@@ -188,7 +188,7 @@ def OnESPacket(current_pid, packet, header_size):
         # allow IOErrors to kill application
         raise ex
     except Exception as err:
-        if not SILENT:
+        if not SILENT and pid >= 0:
             print(("Exception thrown while handling DataGroup in ES. This may be due to many factors"
                   + "such as file corruption or the .ts file using as yet unsupported features."))
             traceback.print_exc(file=sys.stdout)
