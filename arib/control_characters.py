@@ -34,7 +34,7 @@ class NUL(object):
         '''
         return 1
 
-    def __unicode__(self):
+    def __str__(self):
         return 'NUL'
 
     @staticmethod
@@ -56,7 +56,7 @@ class SP(object):
         '''
         return 1
 
-    def __unicode__(self):
+    def __str__(self):
         return ' '
 
     @staticmethod
@@ -79,7 +79,7 @@ class DEL(object):
         '''
         return 1
 
-    def __unicode__(self):
+    def __str__(self):
         return 'DEL'
 
     @staticmethod
@@ -102,7 +102,7 @@ class BEL(object):
         '''
         return 1
 
-    def __unicode__(self):
+    def __str__(self):
         return 'BEL'
 
     @staticmethod
@@ -129,7 +129,7 @@ class APB(object):
         '''
         return 1
 
-    def __unicode__(self):
+    def __str__(self):
         return 'APB'
 
     @staticmethod
@@ -156,7 +156,7 @@ class APF(object):
         '''
         return 1
 
-    def __unicode__(self):
+    def __str__(self):
         return 'APF'
 
     @staticmethod
@@ -182,7 +182,7 @@ class APD(object):
         '''
         return 1
 
-    def __unicode__(self):
+    def __str__(self):
         return 'APD'
 
     @staticmethod
@@ -208,7 +208,7 @@ class APU(object):
         '''
         return 1
 
-    def __unicode__(self):
+    def __str__(self):
         return 'APU'
 
     @staticmethod
@@ -231,7 +231,7 @@ class CS(object):
         '''
         return 1
 
-    def __unicode__(self):
+    def __str__(self):
         return '<clear screen>'
 
     @staticmethod
@@ -255,7 +255,7 @@ class APR(object):
         '''
         return 1
 
-    def __unicode__(self):
+    def __str__(self):
         return 'APR'
 
     @staticmethod
@@ -279,7 +279,7 @@ class LS1(object):
         '''
         return 1
 
-    def __unicode__(self):
+    def __str__(self):
         return 'LS1'
 
     @staticmethod
@@ -303,7 +303,7 @@ class LS0(object):
         '''
         return 1
 
-    def __unicode__(self):
+    def __str__(self):
         return 'LS0'
 
     @staticmethod
@@ -332,7 +332,7 @@ class PAPF(object):
         '''
         return 2
 
-    def __unicode__(self):
+    def __str__(self):
         return '<PAPF>'
 
     @staticmethod
@@ -372,7 +372,7 @@ class SS2(object):
         '''
         return 1
 
-    def __unicode__(self):
+    def __str__(self):
         return 'SS2'
 
     @staticmethod
@@ -401,7 +401,7 @@ class LS2(object):
         # print 'setting GL to G2 with contents {g}'.format(g=str(type(decoder._G2.get())))
         decoder._GL = decoder._G2
 
-    def __unicode__(self):
+    def __str__(self):
         return 'LS2'
 
     @staticmethod
@@ -429,7 +429,7 @@ class LS3(object):
         '''
         decoder._GL = decoder._G3
 
-    def __unicode__(self):
+    def __str__(self):
         return 'LS3'
 
     @staticmethod
@@ -457,7 +457,7 @@ class LS1R(object):
         '''
         decoder._GR = decoder._G1
 
-    def __unicode__(self):
+    def __str__(self):
         return 'LS1R'
 
     @staticmethod
@@ -485,7 +485,7 @@ class LS2R(object):
         '''
         decoder._GR = decoder._G2
 
-    def __unicode__(self):
+    def __str__(self):
         return 'LS2R'
 
     @staticmethod
@@ -513,7 +513,7 @@ class LS3R(object):
         '''
         decoder._GR = decoder._G3
 
-    def __unicode__(self):
+    def __str__(self):
         return 'LS3R'
 
     @staticmethod
@@ -753,7 +753,7 @@ class ESC(object):
         '''
         return len(self._args) + 1
 
-    def __unicode__(self):
+    def __str__(self):
         return 'ESC {args}'.format(args=' '.join('{:#x}'.format(x) for x in self._args))
 
     def is_invocation(self):
@@ -898,7 +898,7 @@ class APS(object):
         '''
         return len(self._args) + 1
 
-    def __unicode__(self):
+    def __str__(self):
         return '\n<Screen Posiiton to {:#d},{:#d}>'.format(self._args[0], self._args[1])
 
     @staticmethod
@@ -922,7 +922,7 @@ class SS3(object):
         '''
         return 1
 
-    def __unicode__(self):
+    def __str__(self):
         return 'SS3'
 
     @staticmethod
@@ -946,7 +946,7 @@ class RS(object):
         '''
         return 1
 
-    def __unicode__(self):
+    def __str__(self):
         return 'RS'
 
     @staticmethod
@@ -970,7 +970,7 @@ class US(object):
         '''
         return 1
 
-    def __unicode__(self):
+    def __str__(self):
         return 'US'
 
     @staticmethod
@@ -997,7 +997,7 @@ class BKF(object):
         '''
         return 1
 
-    def __unicode__(self):
+    def __str__(self):
         return '<black>'
 
     @staticmethod
@@ -1029,7 +1029,7 @@ class COL(object):
         '''
         return len(self._args) + 1
 
-    def __unicode__(self):
+    def __str__(self):
         return 'COL {args}'.format(args=' '.join('{:#x}'.format(x) for x in self._args))
 
     @staticmethod
@@ -1051,7 +1051,7 @@ class RDF(object):
         '''
         return 1
 
-    def __unicode__(self):
+    def __str__(self):
         return '<red>'
 
     @staticmethod
@@ -1076,7 +1076,7 @@ class FLC(object):
         '''
         return len(self._args) + 1
 
-    def __unicode__(self):
+    def __str__(self):
         return 'FLC {args}'.format(args=' '.join('{:#x}'.format(x) for x in self._args))
 
     @staticmethod
@@ -1098,7 +1098,7 @@ class GRF(object):
         '''
         return 1
 
-    def __unicode__(self):
+    def __str__(self):
         return '<green>'
 
     @staticmethod
@@ -1135,7 +1135,7 @@ class YLF(object):
         '''
         return 1
 
-    def __unicode__(self):
+    def __str__(self):
         return '<yellow>'
 
     @staticmethod
@@ -1171,7 +1171,7 @@ class BLF(object):
         '''
         return 1
 
-    def __unicode__(self):
+    def __str__(self):
         return '<blue>'
 
     @staticmethod
@@ -1210,7 +1210,7 @@ class MGF(object):
         '''
         return 1
 
-    def __unicode__(self):
+    def __str__(self):
         return '<magenta>'
 
     @staticmethod
@@ -1247,7 +1247,7 @@ class CNF(object):
         '''
         return 1
 
-    def __unicode__(self):
+    def __str__(self):
         return '<cyan>'
 
     @staticmethod
@@ -1269,7 +1269,7 @@ class WHF(object):
         '''
         return 1
 
-    def __unicode__(self):
+    def __str__(self):
         return '<white>'
 
     @staticmethod
@@ -1292,7 +1292,7 @@ class HLC(object):
     def __len__(self):
         return 2
 
-    def __unicode__(self):
+    def __str__(self):
         if self._start:
             return '<Highlight start>'
         else:
@@ -1319,7 +1319,7 @@ class SSZ(object):
         '''
         return 1
 
-    def __unicode__(self):
+    def __str__(self):
         return '<Small Text>'
 
     @staticmethod
@@ -1359,7 +1359,7 @@ class MSZ(object):
         '''
         return 1
 
-    def __unicode__(self):
+    def __str__(self):
         return '<Medium Text>'
 
     @staticmethod
@@ -1397,7 +1397,7 @@ class NSZ(object):
         '''
         return 1
 
-    def __unicode__(self):
+    def __str__(self):
         return '<Normal Text>'
 
     @staticmethod
@@ -1465,9 +1465,9 @@ class CSI(object):
         '''
         return len(self._args) + 1
 
-    def __unicode__(self):
+    def __str__(self):
         try:
-            return '<CS:"{seq}">'.format(seq=''.join('{:#c}'.format(x) for x in self._args))
+            return '<CS:"{seq}">'.format(seq=''.join('{:c}'.format(x) for x in self._args))
         except UnicodeDecodeError:
             return '<CS:"{seq}">'.format(seq=''.join(':{h}'.format(h=hex(x)) for x in self._args))
 
@@ -1493,7 +1493,7 @@ class TIME(object):
         '''
         return len(self._args) + 1
 
-    def __unicode__(self):
+    def __str__(self):
         return 'TIME {args}'.format(args=' '.join('{:#x}'.format(x) for x in self._args))
 
     @staticmethod

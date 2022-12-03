@@ -177,7 +177,7 @@ class Kanji(object):
     def __len__(self):
         return len(self._args)
 
-    def __unicode__(self):
+    def __str__(self):
         '''stringify
         '''
         return self._character
@@ -208,7 +208,7 @@ class Alphanumeric(object):
     def __len__(self):
         return len(self._args)
 
-    def __unicode__(self):
+    def __str__(self):
         '''stringify
         '''
         return self._character
@@ -234,7 +234,7 @@ class Hiragana(object):
     def __len__(self):
         return len(self._args)
 
-    def __unicode__(self):
+    def __str__(self):
         '''stringify
         '''
         return self._character
@@ -280,7 +280,7 @@ class Katakana(object):
     def __len__(self):
         return len(self._args)
 
-    def __unicode__(self):
+    def __str__(self):
         '''stringify
         '''
         return self._character
@@ -441,7 +441,7 @@ class Macro(object):
     def __len__(self):
         return len(self._args)
 
-    def __unicode__(self):
+    def __str__(self):
         '''stringify
         '''
         return '{n} {s}'.format(n=self.__class__.__name__, s=' '.join('{:#x}'.format(x) for x in self._args))
@@ -464,7 +464,7 @@ class DRCS0(object):
     def __len__(self):
         return len(self._args)
 
-    def __unicode__(self):
+    def __str__(self):
         '''stringify
         '''
         # return u'{n} {s}'.format(n=unicode(self.__class__.__name__), s=u' '.join('{:#x}'.format(x) for x in self._args))
@@ -487,7 +487,7 @@ class DRCS1(object):
     def __len__(self):
         return len(self._args)
 
-    def __unicode__(self):
+    def __str__(self):
         '''stringify
         '''
         return '�'
@@ -507,7 +507,7 @@ class DRCS2(object):
     def __len__(self):
         return len(self._args)
 
-    def __unicode__(self):
+    def __str__(self):
         '''stringify to
         '''
         return '�'
@@ -527,7 +527,7 @@ class DRCS3(object):
     def __len__(self):
         return len(self._args)
 
-    def __unicode__(self):
+    def __str__(self):
         '''stringify
         '''
         return '�'
@@ -547,7 +547,7 @@ class DRCS4(object):
     def __len__(self):
         return len(self._args)
 
-    def __unicode__(self):
+    def __str__(self):
         '''stringify
         '''
         return '�'
@@ -567,7 +567,7 @@ class DRCS5(object):
     def __len__(self):
         return len(self._args)
 
-    def __unicode__(self):
+    def __str__(self):
         '''stringify
         '''
         return '�'
@@ -587,7 +587,7 @@ class DRCS6(object):
     def __len__(self):
         return len(self._args)
 
-    def __unicode__(self):
+    def __str__(self):
         '''stringify
         '''
         return '�'
@@ -607,7 +607,7 @@ class DRCS7(object):
     def __len__(self):
         return len(self._args)
 
-    def __unicode__(self):
+    def __str__(self):
         '''stringify
         '''
         return '�'
@@ -627,7 +627,7 @@ class DRCS8(object):
     def __len__(self):
         return len(self._args)
 
-    def __unicode__(self):
+    def __str__(self):
         '''stringify
         '''
         return '�'
@@ -647,7 +647,7 @@ class DRCS9(object):
     def __len__(self):
         return len(self._args)
 
-    def __unicode__(self):
+    def __str__(self):
         '''stringify
         '''
         return '�'
@@ -667,7 +667,7 @@ class DRCS10(object):
     def __len__(self):
         return len(self._args)
 
-    def __unicode__(self):
+    def __str__(self):
         '''stringify
         '''
         return '�'
@@ -687,7 +687,7 @@ class DRCS11(object):
     def __len__(self):
         return len(self._args)
 
-    def __unicode__(self):
+    def __str__(self):
         '''stringify
         '''
         return '�'
@@ -707,7 +707,7 @@ class DRCS12(object):
     def __len__(self):
         return len(self._args)
 
-    def __unicode__(self):
+    def __str__(self):
         '''stringify
         '''
         return '�'
@@ -727,7 +727,7 @@ class DRCS13(object):
     def __len__(self):
         return len(self._args)
 
-    def __unicode__(self):
+    def __str__(self):
         '''stringify
         '''
         return '�'
@@ -747,7 +747,7 @@ class DRCS14(object):
     def __len__(self):
         return len(self._args)
 
-    def __unicode__(self):
+    def __str__(self):
         '''stringify
         '''
         return '�'
@@ -767,7 +767,7 @@ class DRCS15(object):
     def __len__(self):
         return len(self._args)
 
-    def __unicode__(self):
+    def __str__(self):
         '''stringify
         '''
         return '�'
