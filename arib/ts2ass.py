@@ -15,15 +15,15 @@ import sys
 import argparse
 import traceback
 
-from read import EOFError
+from .read import EOFError
 
 from arib.closed_caption import next_data_unit
 from arib.closed_caption import StatementBody
 from arib.data_group import DataGroup
-from arib_exceptions import FileOpenError
+from .arib_exceptions import FileOpenError
 
-from mpeg.ts import TS
-from mpeg.ts import ES
+from .mpeg.ts import TS
+from .mpeg.ts import ES
 
 from arib.ass import ASSFormatter
 from arib.ass import ASSFile
@@ -58,7 +58,7 @@ def win32_unicode_argv():
         # Remove Python executable and commands if present
         start = argc.value - len(sys.argv)
         return [argv[i] for i in
-                xrange(start, argc.value)]
+                range(start, argc.value)]
 
 
 sys.argv = win32_unicode_argv()
@@ -171,9 +171,9 @@ def OnESPacket(current_pid, packet, header_size):
             if pid < 0 and numlang > 0:
                 for language in range(numlang):
                     if not SILENT:
-                        print("Closed caption management data for language: "
+                        print(("Closed caption management data for language: "
                               + management_data.language_code(language)
-                              + " available in PID: " + str(current_pid))
+                              + " available in PID: " + str(current_pid)))
                         print("Will now only process this PID to improve performance.")
                 pid = current_pid
 
@@ -182,10 +182,10 @@ def OnESPacket(current_pid, packet, header_size):
     except FileOpenError as ex:
         # allow IOErrors to kill application
         raise ex
-    except Exception, err:
+    except Exception as err:
         if not SILENT and pid >= 0:
-            print("Exception thrown while handling DataGroup in ES. This may be due to many factors"
-                  + "such as file corruption or the .ts file using as yet unsupported features.")
+            print(("Exception thrown while handling DataGroup in ES. This may be due to many factors"
+                  + "such as file corruption or the .ts file using as yet unsupported features."))
             traceback.print_exc(file=sys.stdout)
 
 
@@ -200,8 +200,8 @@ def main():
 
     parser = argparse.ArgumentParser(
         description='Remove ARIB formatted Closed Caption information from an MPEG TS file and format the results as a standard .ass subtitle file.')
-    parser.add_argument('infile', help='Input filename (MPEG2 Transport Stream File)', type=unicode)
-    parser.add_argument('-o', '--outfile', help='Output filename (.ass subtitle file)', type=unicode, default=None)
+    parser.add_argument('infile', help='Input filename (MPEG2 Transport Stream File)', type=str)
+    parser.add_argument('-o', '--outfile', help='Output filename (.ass subtitle file)', type=str, default=None)
     parser.add_argument('-p', '--pid',
                         help='Specify a PID of a PES known to contain closed caption info (tool will attempt to find the proper PID if not specified.).',
                         type=int, default=-1)
@@ -225,7 +225,7 @@ def main():
     time_offset = args.timeoffset
 
     if not os.path.exists(infilename) and not SILENT:
-        print 'Input filename :' + infilename + " does not exist."
+        print('Input filename :' + infilename + " does not exist.")
         sys.exit(-1)
 
     ts = TS(infilename)
@@ -237,11 +237,11 @@ def main():
     ts.Parse()
 
     if pid < 0 and not SILENT:
-        print("*** Sorry. No ARIB subtitle content was found in file: " + infilename + " ***")
+        print(("*** Sorry. No ARIB subtitle content was found in file: " + infilename + " ***"))
         sys.exit(-1)
 
     if ass and not ass.file_written() and not SILENT:
-        print("*** Sorry. No nonempty ARIB closed caption content found in file " + infilename + " ***")
+        print(("*** Sorry. No nonempty ARIB closed caption content found in file " + infilename + " ***"))
         sys.exit(-1)
 
     sys.exit(0)
