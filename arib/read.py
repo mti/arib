@@ -42,7 +42,7 @@ def ucb(f):
         if len(f) < 1:
             raise EOFError()
         b, f = split_buffer(1, f)
-        return struct.unpack('B', ''.join(b))[0]
+        return struct.unpack('B', bytes(b))[0]
     else:
         _f = f.read(1)
         if len(_f) < 1:
@@ -55,7 +55,7 @@ def usb(f):
     '''
     if isinstance(f, list):
         n, f = split_buffer(2, f)
-        return struct.unpack('>H', ''.join(n))[0]
+        return struct.unpack('>H', bytes(n))[0]
     else:
         _f = f.read(2)
         if DEBUG:
@@ -70,7 +70,7 @@ def ui3b(f):
     '''
     if isinstance(f, list):
         n, f = split_buffer(3, f)
-        return struct.unpack('>I', '\x00' + ''.join(n))[0]
+        return struct.unpack('>I', b'\x00' + bytes(n))[0]
     else:
         _f = f.read(3)
         if len(_f) < 3:
@@ -84,7 +84,7 @@ def uib(f):
     '''
     if isinstance(f, list):
         n, f = split_buffer(4, f)
-        return struct.unpack('>L', ''.join(n))[0]
+        return struct.unpack('>L', bytes(n))[0]
     else:
         _f = f.read(4)
         if len(_f) < 4:
@@ -98,7 +98,7 @@ def ulb(f):
     '''
     if isinstance(f, list):
         n, f = split_buffer(8, f)
-        return struct.unpack('>Q', ''.join(n))[0]
+        return struct.unpack('>Q', bytes(n))[0]
     else:
         _f = f.read(8)
         if len(_f) < 8:
