@@ -282,13 +282,7 @@ class TS(object):
             if self.OnTSPacket:
                 self.OnTSPacket(packet)
 
-            # Update a progress callback
-            self._read_size += TS.PACKET_SIZE
-            percent_read = ((self._read_size / float(self._total_filesize)) * 100)
-            new_percent_read = int(percent_read * 100)
-            if new_percent_read != prev_percent_read and self.Progress:
-                self.Progress(self._read_size, self._total_filesize, percent_read)
-                prev_percent_read = new_percent_read
+            self.Progress(TS.PACKET_SIZE, self._total_filesize)
 
             adaptation_field_control = TS.get_adaptation_field_control(packet)
             continuity_counter = TS.get_continuity_counter(packet)

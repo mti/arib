@@ -30,6 +30,8 @@ from arib.ass import ASSFile
 
 import sys
 
+from tqdm import tqdm
+
 
 def win32_unicode_argv():
     """Uses shell32.GetCommandLineArgvW to get sys.argv as a list of Unicode
@@ -74,9 +76,10 @@ ass = None
 infilename = ""
 outfilename = ""
 tmax = 0
+pbar = None
 
 
-def OnProgress(bytes_read, total_bytes, percent):
+def OnProgress(bytes_read, total_bytes):
     """
     Callback method invoked on a change in file progress percent (not every packet)
     Meant as a lower frequency callback to update onscreen progress percent or something.
@@ -87,10 +90,11 @@ def OnProgress(bytes_read, total_bytes, percent):
     """
     global VERBOSE
     global SILENT
+    global pbar
+    if not pbar:
+        pbar = tqdm(total=total_bytes, unit='B', unit_scale=True, unit_divisor=1024, miniters=1)
     if VERBOSE and not SILENT:
-        # TODO TQDM
-        print("progress: %.2f%%   \r" % (percent))
-        sys.stdout.flush()
+        pbar.update(bytes_read)
 
 
 def OnTSPacket(packet):
