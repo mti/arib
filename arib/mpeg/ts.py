@@ -43,7 +43,7 @@ class ES:
         if len(payload) < 6:
             return 0
         # we add 6 for start code, stream id and pes packet length itself
-        return struct.unpack('>H', payload[4:6])[0] + 6
+        return int.from_bytes(payload[4:6], 'big') + 6
 
     @staticmethod
     def get_pes_flags(payload):

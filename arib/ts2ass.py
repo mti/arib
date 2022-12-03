@@ -92,7 +92,7 @@ def OnProgress(bytes_read, total_bytes):
     global SILENT
     global pbar
     if not pbar:
-        pbar = tqdm(total=total_bytes, unit='B', unit_scale=True, unit_divisor=1024, mininterval=1)
+        pbar = tqdm(total=total_bytes, unit='B', unit_scale=True, unit_divisor=1024, miniters=1000000)
     if VERBOSE and not SILENT:
         pbar.update(bytes_read)
 
