@@ -272,26 +272,31 @@ class TS(object):
         """Go through the .ts file, and invoke a callback on each TS packet and ES packet
         Also invoke progress callbacks and packet error callbacks as appropriate
         """
-        prev_percent_read = 0
+        read_bytes = 0
+        last_update = 0
         for packet in TS.next_packet(self._filename):
             # check_packet_formedness(packet)
-            pei = TS.get_transport_error_indicator(packet)
+            # pei = TS.get_transport_error_indicator(packet)  # TODO unused
             pusi = TS.get_payload_start(packet)
             pid = TS.get_pid(packet)
-            tsc = TS.get_tsc(packet)
+            # tsc = TS.get_tsc(packet)  # TODO unused
 
             # per .ts packet handler
             if self.OnTSPacket:
                 self.OnTSPacket(packet)
 
-            self.Progress(TS.PACKET_SIZE, self._total_filesize)
+            read_bytes += TS.PACKET_SIZE
+            new_bytes = read_bytes - last_update
+            if new_bytes > 1000000:
+                last_update = read_bytes
+                self.Progress(new_bytes, self._total_filesize)
 
-            adaptation_field_control = TS.get_adaptation_field_control(packet)
-            continuity_counter = TS.get_continuity_counter(packet)
+            # adaptation_field_control = TS.get_adaptation_field_control(packet)  # TODO unused
+            # continuity_counter = TS.get_continuity_counter(packet)  # TODO unused
 
             # put together PES from payloads
             payload = TS.get_payload(packet)
-            if pusi == True:
+            if pusi:
                 if not ES.pes_packet_check_formedness(payload):
                     if pid in self._elementary_streams:
                         self._elementary_streams[pid] = None

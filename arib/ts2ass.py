@@ -65,7 +65,7 @@ def OnProgress(bytes_read, total_bytes):
             unit="B",
             unit_scale=True,
             unit_divisor=1024,
-            miniters=1000000,
+            miniters=1,
         )
     if VERBOSE and not SILENT:
         pbar.update(bytes_read)
