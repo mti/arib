@@ -175,7 +175,7 @@ class DRCSFont(object):
             self._pixels = []
 
             # assuming 4 pixels per byte. How is this tied to depth above? (typical depth = 2)
-            for i in range((self._width * self._height) / 4):
+            for i in range(int((self._width * self._height) / 4)):
                 self._pixels.append(read.ucb(f))
 
             tmp_str = str(self._pixels)
