@@ -46,6 +46,7 @@ setup(
     license="MIT",
     packages=[
         "arib",
+        "arib.mpeg",
     ],
     install_requires=requirements(),
     entry_points={
