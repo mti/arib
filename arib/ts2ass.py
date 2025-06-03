@@ -15,18 +15,18 @@ import sys
 import argparse
 import traceback
 
-from read import EOFError
+from .read import EOFError
 
-from closed_caption import next_data_unit
-from closed_caption import StatementBody
-from data_group import DataGroup
-from arib_exceptions import FileOpenError
+from .closed_caption import next_data_unit
+from .closed_caption import StatementBody
+from .data_group import DataGroup
+from .arib_exceptions import FileOpenError
 
-from mpeg.ts import TS
-from mpeg.ts import ES
+from .mpeg.ts import TS
+from .mpeg.ts import ES
 
-from ass import ASSFormatter
-from ass import ASSFile
+from .ass import ASSFormatter
+from .ass import ASSFile
 
 import sys
 

@@ -11,16 +11,16 @@ import os
 import sys
 import argparse
 import traceback
-from read import EOFError
+from .read import EOFError
 
-from mpeg.ts import TS
-from mpeg.ts import ES
+from .mpeg.ts import TS
+from .mpeg.ts import ES
 
-from closed_caption import next_data_unit
-from closed_caption import StatementBody
-import code_set as code_set
-import control_characters as control_characters
-from data_group import DataGroup
+from .closed_caption import next_data_unit
+from .closed_caption import StatementBody
+import .code_set as code_set
+import .control_characters as control_characters
+from .data_group import DataGroup
 
 # print out some additional info for DRCS values
 from closed_caption import set_DRCS_debug

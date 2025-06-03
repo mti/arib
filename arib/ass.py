@@ -13,11 +13,11 @@ file.
   
 """
 
-import code_set as code_set
-import control_characters as control_characters
+import .code_set as code_set
+import .control_characters as control_characters
 import codecs
 import re
-from arib_exceptions import FileOpenError
+from .arib_exceptions import FileOpenError
 
 
 class Pos(object):

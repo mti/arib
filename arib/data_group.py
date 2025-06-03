@@ -12,11 +12,11 @@ caption and teletext elementary stream.
 """
 import sys
 import read
-from read import EOFError
+from .read import EOFError
 import traceback
 
-from closed_caption import CaptionStatementData
-from closed_caption import CaptionManagementData
+from .closed_caption import CaptionStatementData
+from .closed_caption import CaptionManagementData
 from struct import error as struct_error
 from copy import copy
 

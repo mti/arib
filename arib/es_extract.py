@@ -12,18 +12,18 @@ import sys
 import argparse
 import traceback
 
-from mpeg.ts import TS
-from mpeg.ts import ES
+from .mpeg.ts import TS
+from .mpeg.ts import ES
 
-from closed_caption import next_data_unit
-from closed_caption import StatementBody
-import code_set as code_set
-import control_characters as control_characters
-from data_group import DataGroup
-from data_group import next_data_group
+from .closed_caption import next_data_unit
+from .closed_caption import StatementBody
+import .code_set as code_set
+import .control_characters as control_characters
+from .data_group import DataGroup
+from .data_group import next_data_group
 
 # print out some additional info for DRCS values
-from closed_caption import set_DRCS_debug
+from .closed_caption import set_DRCS_debug
 
 set_DRCS_debug(True)
 

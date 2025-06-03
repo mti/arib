@@ -8,11 +8,11 @@ DATE: Friday, March 15th 2014
 
 """
 
-import read
-from control_characters import is_control_character
-from control_characters import handle_control_character
-import control_characters as control_char
-import code_set
+import .read
+from .control_characters import is_control_character
+from .control_characters import handle_control_character
+import .control_characters as control_char
+import .code_set
 
 DEBUG = False
 
