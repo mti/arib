@@ -40,3 +40,6 @@ nosetests.xml
 
 # Jetbrains
 .idea
+
+*~
+*.swp
