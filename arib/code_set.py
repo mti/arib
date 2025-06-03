@@ -11,8 +11,8 @@ handling for code sets in japanese closed captions
 
 """
 
-from arib_exceptions import UnimplimentedError
-import read
+from .arib_exceptions import UnimplimentedError
+from . import read
 
 DEBUG = False
 

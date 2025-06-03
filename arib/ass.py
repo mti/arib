@@ -13,8 +13,8 @@ file.
   
 """
 
-import .code_set as code_set
-import .control_characters as control_characters
+from . import code_set
+from . import control_characters
 import codecs
 import re
 from .arib_exceptions import FileOpenError

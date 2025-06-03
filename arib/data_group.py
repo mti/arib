@@ -11,7 +11,7 @@ caption and teletext elementary stream.
   
 """
 import sys
-import read
+from . import read
 from .read import EOFError
 import traceback
 

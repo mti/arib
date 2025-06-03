@@ -17,8 +17,8 @@ from .mpeg.ts import ES
 
 from .closed_caption import next_data_unit
 from .closed_caption import StatementBody
-import .code_set as code_set
-import .control_characters as control_characters
+from . import code_set
+from . import control_characters
 from .data_group import DataGroup
 from .data_group import next_data_group
 

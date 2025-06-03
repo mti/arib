@@ -12,9 +12,9 @@ an ARIB data group
 
 """
 
-import .read
+from . import read
 from .decoder import Decoder
-import .code_set
+from . import code_set
 
 DEBUG = False
 DRCS_DEBUG = False
